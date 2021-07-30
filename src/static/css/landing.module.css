@@ -1,0 +1,19 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  background-color: rgb(39, 42, 61);
+}
+.spinner {
+  color: white;
+  margin-top: 0.5em;
+}
+
+.message {
+  color: white;
+  font-size: 1.6em;
+  margin-top: 0.4em;
+}
