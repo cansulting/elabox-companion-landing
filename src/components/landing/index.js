@@ -27,12 +27,13 @@ export default function Index({ elaStatus, handleCheckStatus }) {
         setIsUpdateAlreadyRan(true)
       }
     })
+    //eslint-disable-next-line
   }, [])
   useEffect(() => {
     if (elaStatus === "active" && isUpdateAlreadyRan) {
-      window.location.reload()
+      window.location.replace("http://192.168.18.70:3000")
     }
-  }, [elaStatus])
+  }, [elaStatus, isUpdateAlreadyRan])
   return (
     <div className={styles.container}>
       <img src={Logo} alt="elabox logo" />

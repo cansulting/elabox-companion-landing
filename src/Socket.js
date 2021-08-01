@@ -2,7 +2,6 @@ import { useEffect, useState } from "react"
 import io from "socket.io-client"
 const PUBLIC_URI = window.location.hostname + ":9000"
 window.socket = io(PUBLIC_URI, { transports: ["websocket"] })
-
 function Socket({ children }) {
   const [elaStatus, setElaStatus] = useState("")
   const socket = window.socket
@@ -24,6 +23,7 @@ function Socket({ children }) {
     socket.on("connect_error", (response) => {
       console.log(response)
     })
+    //eslint-disable-next-line
   }, [socket])
   return children({ elaStatus, handleCheckStatus })
 }
