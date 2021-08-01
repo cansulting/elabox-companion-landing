@@ -31,7 +31,7 @@ export default function Index({ elaStatus, handleCheckStatus }) {
   }, [socket])
   useEffect(() => {
     if (elaStatus === "active" && isUpdateAlreadyRan) {
-      window.location.replace("http://192.168.18.70:3000")
+      window.location.reload()
     }
   }, [elaStatus, isUpdateAlreadyRan])
   return (
