@@ -28,7 +28,7 @@ export default function Index({ elaStatus, handleCheckStatus }) {
       }
     })
     //eslint-disable-next-line
-  }, [])
+  }, [socket])
   useEffect(() => {
     if (elaStatus === "active" && isUpdateAlreadyRan) {
       window.location.replace("http://192.168.18.70:3000")
