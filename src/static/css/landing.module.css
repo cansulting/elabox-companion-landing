@@ -21,8 +21,8 @@
   background-color: white;
   color: black;
   font-size: 1em;
-  margin-top: 0.4em;
-  max-height: 20vh;
+  margin: 0.4em;
+  max-height: 25vh;
   overflow: auto;
   padding: 1em;
 }

@@ -9,7 +9,6 @@ export default function Index({ elaStatus, handleCheckStatus }) {
   const installerLogsRef = useRef()
   const socket = window.socket
   const showInstallerLogs = installerLogs?.length > 0
-  const showStatus = elaStatus === "updating"
   useEffect(() => {
     if (installerLogsRef.current) {
       installerLogsRef.current.scrollIntoView()
@@ -37,17 +36,17 @@ export default function Index({ elaStatus, handleCheckStatus }) {
   return (
     <div className={styles.container}>
       <img src={Logo} alt="elabox logo" />
-      {showStatus && (
-        <>
-          <FontAwesomeIcon
-            className={styles.spinner}
-            icon={faCircleNotch}
-            spin
-            size={"4x"}
-          />
-          <p className={styles.message}>Please Wait</p>
-        </>
-      )}
+      <FontAwesomeIcon
+        className={styles.spinner}
+        icon={faCircleNotch}
+        spin
+        size={"4x"}
+      />
+      <p className={styles.message}>
+        {elaStatus === "updating" && showInstallerLogs
+          ? "Updating"
+          : "Please Wait"}
+      </p>
       {showInstallerLogs && (
         <p className={styles.logs} ref={installerLogsRef}>
           {installerLogs}
