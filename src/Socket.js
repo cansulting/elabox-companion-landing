@@ -1,17 +1,22 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import io from "socket.io-client"
 const PUBLIC_URI = window.location.hostname + ":9000"
 window.socket = io(PUBLIC_URI, { transports: ["websocket"] })
 
 function Socket({ children }) {
+  const [elaStatus, setElaStatus] = useState("")
   const socket = window.socket
+  const handleCheckStatus = () => {
+    socket.emit("elastatus", (currentStatus) => {
+      setElaStatus(currentStatus)
+    })
+  }
   useEffect(() => {
     if (!socket) return
     socket.on("connect", () => {
       console.log("connected")
-      socket.emit("ela.system.SUBSCRIBE", {
-        id: "ela.broadcast.SYSTEM_STATUS_CHANGE",
-      })
+      handleCheckStatus()
+      socket.emit("ela.system.SUBSCRIBE", "ela.system")
     })
     socket.on("disconnect", () => {
       console.log("disconnected")
@@ -19,15 +24,7 @@ function Socket({ children }) {
     socket.on("connect_error", (response) => {
       console.log(response)
     })
-    socket.on("error", (response) => {
-      console.log(response)
-    })
-    socket.onopen = function (e) {
-      alert("[open] Connection established")
-      alert("Sending to server")
-      // socket.send("My name is John")
-    }
   }, [socket])
-  return children
+  return children({ elaStatus, handleCheckStatus })
 }
 export default Socket

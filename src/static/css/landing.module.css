@@ -17,3 +17,12 @@
   font-size: 1.6em;
   margin-top: 0.4em;
 }
+.logs {
+  background-color: white;
+  color: black;
+  font-size: 1em;
+  margin-top: 0.4em;
+  max-height: 20vh;
+  overflow: auto;
+  padding: 1em;
+}

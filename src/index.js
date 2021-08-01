@@ -7,7 +7,12 @@ import App from "./App"
 ReactDOM.render(
   <React.StrictMode>
     <Socket>
-      <App />
+      {(parent) => (
+        <App
+          elaStatus={parent.elaStatus}
+          handleCheckStatus={parent.handleCheckStatus}
+        />
+      )}
     </Socket>
   </React.StrictMode>,
   document.getElementById("root")

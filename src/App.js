@@ -1,10 +1,10 @@
 import Landing from "./components/landing"
 import "./App.css"
 
-function App() {
+function App({ elaStatus, handleCheckStatus }) {
   return (
     <div className="App">
-      <Landing />
+      <Landing elaStatus={elaStatus} handleCheckStatus={handleCheckStatus} />
     </div>
   )
 }
