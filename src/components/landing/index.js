@@ -19,7 +19,7 @@ export default function Index({ elaStatus, handleCheckStatus }) {
       return
     }
     socket.on("log", (response) => {
-      setInstallerLogs((prevLogs) => prevLogs + response)
+      setInstallerLogs((prevLogs) => prevLogs + response + "\n")
       if (elaStatus !== "updating") {
         handleCheckStatus()
       }
@@ -49,10 +49,14 @@ export default function Index({ elaStatus, handleCheckStatus }) {
           : "Please Wait"}
       </p>
       {showInstallerLogs && (
-        <p className={styles.logs} ref={installerLogsRef}>
-          {installerLogs}
+        <div className={styles.logs} ref={installerLogsRef}>
+          {installerLogs.split("\n").map((log, key) => (
+            <p className={styles.log} key={key}>
+              {log}
+            </p>
+          ))}
           <AlwaysScrollToBottom />
-        </p>
+        </div>
       )}
     </div>
   )

@@ -26,3 +26,7 @@
   overflow: auto;
   padding: 1em;
 }
+.log {
+  padding: 0;
+  margin: 0.1em;
+}
