@@ -5,10 +5,13 @@ import Logo from "../../static/images/logo.png"
 import styles from "../../static/css/landing.module.css"
 export default function Index({ elaStatus, handleCheckStatus }) {
   const [installerLogs, setInstallerLogs] = useState("")
+  const [showLogs, setShowLogs] = useState(false)
   const [isUpdateAlreadyRan, setIsUpdateAlreadyRan] = useState(false)
   const installerLogsRef = useRef()
   const socket = window.socket
-  const showInstallerLogs = installerLogs?.length > 0
+  const handleShowInstallerLogs = () => {
+    setShowLogs(!showLogs)
+  }
   useEffect(() => {
     if (installerLogsRef.current) {
       installerLogsRef.current.scrollIntoView()
@@ -44,11 +47,12 @@ export default function Index({ elaStatus, handleCheckStatus }) {
         size={"4x"}
       />
       <p className={styles.message}>
-        {elaStatus === "updating" && showInstallerLogs
-          ? "Updating"
-          : "Please Wait"}
+        {elaStatus === "updating" ? "Updating" : "Please Wait"}
       </p>
-      {showInstallerLogs && (
+      <button className={styles.btnShowLogs} onClick={handleShowInstallerLogs}>
+        {showLogs ? "Hide" : "Show"} Logs
+      </button>
+      {showLogs && (
         <div className={styles.logs} ref={installerLogsRef}>
           {installerLogs.split("\n").map((log, key) => (
             <p className={styles.log} key={key}>

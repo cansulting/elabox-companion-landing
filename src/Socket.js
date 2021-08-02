@@ -15,13 +15,22 @@ function Socket({ children }) {
     socket.on("connect", () => {
       console.log("connected")
       handleCheckStatus()
-      socket.emit("ela.system.SUBSCRIBE", "ela.system")
+      socket.emit(
+        "ela.system",
+        { id: "ela.system.SUBSCRIBE", data: "ela.system" },
+        (response) => {
+          console.log(response)
+        }
+      )
+      socket.on("ela.broadcast.SYSTEM_STATUS_CHANGED", (data) => {
+        console.log("Response from ela.system " + data)
+      })
     })
     socket.on("disconnect", () => {
       console.log("disconnected")
     })
     socket.on("connect_error", (response) => {
-      console.log(response)
+      console.log("ERRR " + response)
     })
     //eslint-disable-next-line
   }, [socket])
