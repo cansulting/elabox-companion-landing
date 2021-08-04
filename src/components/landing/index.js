@@ -35,7 +35,7 @@ export default function Index({ elaStatus, handleCheckStatus }) {
   }, [socket])
   useEffect(() => {
     if (elaStatus === "active" && isUpdateAlreadyRan) {
-      window.location.href = "/"
+      window.location.href = "/ela.companion"
     }
   }, [elaStatus, isUpdateAlreadyRan])
   return (
