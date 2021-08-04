@@ -7,7 +7,6 @@ import styles from "../../static/css/landing.module.css"
 export default function Index({ elaStatus, handleCheckStatus }) {
   const [installerLogs, setInstallerLogs] = useState("")
   const [showLogs, setShowLogs] = useState(false)
-  const [isUpdateAlreadyRan, setIsUpdateAlreadyRan] = useState(false)
   const installerLogsRef = useRef()
   const hasLogs = installerLogs?.length > 0
   const handleShowInstallerLogs = () => {
@@ -27,17 +26,14 @@ export default function Index({ elaStatus, handleCheckStatus }) {
       if (elaStatus !== "updating") {
         handleCheckStatus()
       }
-      if (isUpdateAlreadyRan !== true) {
-        setIsUpdateAlreadyRan(true)
-      }
     })
     //eslint-disable-next-line
   }, [socket])
   useEffect(() => {
-    if (elaStatus === "active" && isUpdateAlreadyRan) {
+    if (elaStatus === "active") {
       window.location.href = "/ela.companion"
     }
-  }, [elaStatus, isUpdateAlreadyRan])
+  }, [elaStatus])
   return (
     <div className={styles.container}>
       <img src={Logo} alt="elabox logo" />
