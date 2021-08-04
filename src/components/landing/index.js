@@ -1,14 +1,18 @@
 import React, { useEffect, useState, useRef } from "react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faCircleNotch } from "@fortawesome/free-solid-svg-icons"
+import { socket } from "../../Socket"
 import Logo from "../../static/images/logo.png"
 import styles from "../../static/css/landing.module.css"
 export default function Index({ elaStatus, handleCheckStatus }) {
   const [installerLogs, setInstallerLogs] = useState("")
+  const [showLogs, setShowLogs] = useState(false)
   const [isUpdateAlreadyRan, setIsUpdateAlreadyRan] = useState(false)
   const installerLogsRef = useRef()
-  const socket = window.socket
-  const showInstallerLogs = installerLogs?.length > 0
+  const hasLogs = installerLogs?.length > 0
+  const handleShowInstallerLogs = () => {
+    setShowLogs(!showLogs)
+  }
   useEffect(() => {
     if (installerLogsRef.current) {
       installerLogsRef.current.scrollIntoView()
@@ -19,7 +23,7 @@ export default function Index({ elaStatus, handleCheckStatus }) {
       return
     }
     socket.on("log", (response) => {
-      setInstallerLogs((prevLogs) => prevLogs + response)
+      setInstallerLogs((prevLogs) => prevLogs + response + "\n")
       if (elaStatus !== "updating") {
         handleCheckStatus()
       }
@@ -31,7 +35,7 @@ export default function Index({ elaStatus, handleCheckStatus }) {
   }, [socket])
   useEffect(() => {
     if (elaStatus === "active" && isUpdateAlreadyRan) {
-      window.location.reload()
+      window.location.href = "/ela.companion"
     }
   }, [elaStatus, isUpdateAlreadyRan])
   return (
@@ -44,15 +48,26 @@ export default function Index({ elaStatus, handleCheckStatus }) {
         size={"4x"}
       />
       <p className={styles.message}>
-        {elaStatus === "updating" && showInstallerLogs
-          ? "Updating"
-          : "Please Wait"}
+        {elaStatus === "updating" ? "Updating" : "Please Wait"}
       </p>
-      {showInstallerLogs && (
-        <p className={styles.logs} ref={installerLogsRef}>
-          {installerLogs}
+      {hasLogs && (
+        <button
+          className={styles.btnShowLogs}
+          onClick={handleShowInstallerLogs}
+        >
+          {showLogs ? "Hide" : "Show"} Logs
+        </button>
+      )}
+
+      {showLogs && (
+        <div className={styles.logs} ref={installerLogsRef}>
+          {installerLogs.split("\n").map((log, key) => (
+            <p className={styles.log} key={key}>
+              {log}
+            </p>
+          ))}
           <AlwaysScrollToBottom />
-        </p>
+        </div>
       )}
     </div>
   )
