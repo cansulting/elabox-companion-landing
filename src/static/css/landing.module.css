@@ -33,9 +33,8 @@
   margin: 0.1em;
 }
 .btnShowLogs {
-  background-color: #28a745;
-  border-color: #28a745;
-  color: white;
-  padding: 1em;
-  font-size: 0.9em;
+  background-color: #0c531d00;
+  border-color: #28a74600;
+  color: #898989;
+  font-size: 0.8em;
 }
