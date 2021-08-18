@@ -23,9 +23,6 @@ export default function Index({ elaStatus, handleCheckStatus }) {
     }
     socket.on("log", (response) => {
       setInstallerLogs((prevLogs) => prevLogs + response + "\n")
-      if (elaStatus !== "updating") {
-        handleCheckStatus()
-      }
     })
     //eslint-disable-next-line
   }, [socket])
