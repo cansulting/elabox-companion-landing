@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import io from "socket.io-client"
-const PUBLIC_URI = window.location.hostname + ":9000"
+const PUBLIC_URI = window.location.hostname
 export const socket = io(PUBLIC_URI, { transports: ["websocket"] })
 
 socket.on("connect", () => {
