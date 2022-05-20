@@ -51,7 +51,8 @@ function Socket({ children }) {
   useEffect(() => {
     handleCheckStatus()
     onStatusChanged = (_status) => {
-      setElaStatus(_status)
+      if (elaStatus !== _status)
+        setElaStatus(_status)
     }
     //eslint-disable-next-line
   }, [socket])
