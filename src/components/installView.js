@@ -1,12 +1,11 @@
 import React, { useEffect, useState, useRef } from "react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faCircleNotch } from "@fortawesome/free-solid-svg-icons"
-import { socket } from "../Socket"
-import Logo from "../../static/images/logo.png"
-import styles from "../../static/css/landing.module.css"
+import Logo from "../static/images/logo.png"
+import styles from "../static/css/landing.module.css"
 
 // displays the log information for current install
-export default function Index({ elaStatus, handleCheckStatus }) {
+export default function Index({ elaStatus, socket }) {
   const [installerLogs, setInstallerLogs] = useState("")
   const [showLogs, setShowLogs] = useState(false)
   const installerLogsRef = useRef()
@@ -26,21 +25,16 @@ export default function Index({ elaStatus, handleCheckStatus }) {
     socket.on("log", (response) => {
       setInstallerLogs((prevLogs) => prevLogs + response + "\n")
     })
-    //eslint-disable-next-line
   }, [socket])
-  useEffect(() => {
-    if (elaStatus === "active") {
-      window.location.href = "/ela.companion"
-    }
-  }, [elaStatus])
+
   return (
     <div className={styles.container}>
-      <img src={Logo} alt="elabox logo" />
+      <img src={Logo} alt="elabox logo" style={{width:"200px", padding:"20px"}}/>
       <FontAwesomeIcon
         className={styles.spinner}
         icon={faCircleNotch}
         spin
-        size={"4x"}
+        size={"2x"}
       />
       <p className={styles.message}>
         {elaStatus === "updating" ? "Updating" : "Please Wait"}
