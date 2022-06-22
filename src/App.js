@@ -5,9 +5,8 @@ import { EboxEvent } from 'elabox-foundation'
 import { SETUP_CHECK_STATUS, SETUP_PKID } from "./constants"
 
 const elaEvent = new EboxEvent('http://' + window.location.hostname)
-
 // statuses
-const ACTIVE = "active"   // flag is sytem is ready   
+const ACTIVE = "active"   // flag for sytem if ready   
 const SETUP = "setup"     // flag for already setup
 const SUCCESS_CODE = 200
 const SETUP_URL = "ela.setup"
