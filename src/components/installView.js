@@ -3,13 +3,17 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faCircleNotch } from "@fortawesome/free-solid-svg-icons"
 import Logo from "../static/images/logo.png"
 import styles from "../static/css/landing.module.css"
+import { DISK_CHECKING} from "../constants"
+import { elaStatusMessage } from "../utils/messages"
 
 // displays the log information for current install
 export default function Index({ elaStatus, socket }) {
+  console.log(elaStatus)
   const [installerLogs, setInstallerLogs] = useState("")
   const [showLogs, setShowLogs] = useState(false)
   const installerLogsRef = useRef()
-  const hasLogs = installerLogs?.length > 0
+  const hasLogs = installerLogs?.length > 0 && elaStatus !== DISK_CHECKING
+  let statusMessage = elaStatusMessage(elaStatus)
   const handleShowInstallerLogs = () => {
     setShowLogs(!showLogs)
   }
@@ -37,7 +41,7 @@ export default function Index({ elaStatus, socket }) {
         size={"2x"}
       />
       <p className={styles.message}>
-        {elaStatus === "updating" ? "Updating" : "Please Wait"}
+        {statusMessage}
       </p>
       {hasLogs && (
         <button
@@ -66,3 +70,4 @@ const AlwaysScrollToBottom = () => {
   useEffect(() => elementRef.current.scrollIntoView())
   return <span ref={elementRef} />
 }
+
