@@ -2,7 +2,7 @@ import React  from "react"
 import Logger from "./components/installView"
 import "./App.css"
 import { EboxEvent } from 'elabox-foundation'
-import { SETUP_CHECK_STATUS, SETUP_PKID,SYSTEM_SHUTDOWN_STATUS,SYSTEM_DISK_CHECK } from "./constants"
+import { SETUP_CHECK_STATUS, SETUP_PKID,SYSTEM_SHUTDOWN_STATUS,SYSTEM_DISK_CHECK,DISK_CHECKED,DISK_CHECKING,DISK_CHECKING_ERROR,PROPERLY_SHUTDOWN, NOT_PROPERLY_SHUTDOWN } from "./constants"
 
 const elaEvent = new EboxEvent('http://' + window.location.hostname)
 // statuses
@@ -30,38 +30,55 @@ class App extends React.Component {
     const res = await elaEvent.sendSystemRPC(SYSTEM_DISK_CHECK)
     return res
   }
-  async componentDidMount() {
-    await elaEvent.waitUntilConnected()
-    // elaEvent.getStatus(
-    //   (status) => this.onChangedSysStatus(status),
-    //   true,
-    // )
-    this.checkShutdownStatus().then( res => {
-      if(res.code === SUCCESS_CODE) {
-        switch (res.message) {
-          case "not_properly_shutdown":
-            this.setState({status: "checking_disk"},()=>{
-              this.diskCheck().then( res => {
-                  console.log(res)
-              })
-            })                    
-            break;
-          case "disk_checked":
-            // window.location.href = "/ela.companion"            
-            break;
+  //listen on state change react class component
+  componentDidUpdate(_, prevState) {
+    if(prevState.status !== this.state.status){
+        switch (this.state.status) {
+          case DISK_CHECKED:
+          case PROPERLY_SHUTDOWN:
+            window.location.href = "/ela.companion"            
+            break;       
           default:
             break;
         }
-      }
-    })
+    }
+  }
+
+  async componentDidMount() {
+    await elaEvent.waitUntilConnected()
+      elaEvent.getStatus(
+        (status) => this.onChangedSysStatus(status),
+        true,
+    )
   }
   // onchanged status check whether it needed setup or not.
   // redirect to setup if it not yet
   onChangedSysStatus(status) {
     if (status === ACTIVE) {
       this.checkSetup().then( res => {
-        if (res.code === SUCCESS_CODE && res.message === SETUP) {
-          window.location.href = "/ela.companion"
+        if (res.code === SUCCESS_CODE && res.message === SETUP)  {
+            this.checkShutdownStatus().then( res => {
+              if(res.code === SUCCESS_CODE) {
+                switch (res.message) {
+                  case NOT_PROPERLY_SHUTDOWN:
+                    this.setState({status: DISK_CHECKING},()=>{
+                      this.diskCheck().then( res => {
+                        if(res.code === SUCCESS_CODE) {
+                          if(res.message){
+                            this.setState({status: DISK_CHECKED})
+                            return
+                          }
+                            this.setState({status: DISK_CHECKING_ERROR})                  
+                        }
+                      })
+                    })                    
+                    break;
+                    default:
+                      this.setState({status:res.message})              
+                    break; 
+                }        
+             }
+            })          
           return
         }
         window.location.href = "/" + SETUP_URL
