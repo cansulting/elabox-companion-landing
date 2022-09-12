@@ -9,7 +9,14 @@ export default function Index({ elaStatus, socket }) {
   const [installerLogs, setInstallerLogs] = useState("")
   const [showLogs, setShowLogs] = useState(false)
   const installerLogsRef = useRef()
-  const hasLogs = installerLogs?.length > 0
+  const hasLogs = installerLogs?.length > 0 && elaStatus !== "checking_disk"
+  let statusMessage = "Please Wait"
+  if(elaStatus === "checking_disk") {
+    statusMessage = "Checking Disk"
+  }
+  else if(elaStatus==="updating"){
+    statusMessage = "Updating"
+  }
   const handleShowInstallerLogs = () => {
     setShowLogs(!showLogs)
   }
@@ -37,7 +44,7 @@ export default function Index({ elaStatus, socket }) {
         size={"2x"}
       />
       <p className={styles.message}>
-        {elaStatus === "updating" ? "Updating" : "Please Wait"}
+        {statusMessage}
       </p>
       {hasLogs && (
         <button
