@@ -34,7 +34,7 @@ class App extends React.Component {
     if (status === ACTIVE) {
       this.checkSetup().then( res => {
         if (res.code === SUCCESS_CODE && res.message === SETUP) {
-          window.location.href = "/ela.companion"
+          window.location.href = "/ela.dashboard"
           return
         }
         window.location.href = "/" + SETUP_URL
